@@ -66,7 +66,7 @@ const f: () = {
 ## Installation
 
 ```
-cargo install --frozen everybody_loops
+cargo install --locked everybody_loops
 ```
 
 ## Limitations
