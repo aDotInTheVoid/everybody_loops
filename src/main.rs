@@ -1,4 +1,3 @@
-use anyhow::anyhow;
 use anyhow::Result;
 use fs_err as fs;
 use syn::visit_mut::VisitMut;
@@ -7,10 +6,14 @@ use syn::ImplItemMethod;
 use syn::ItemFn;
 
 fn main() -> Result<()> {
-    let path = std::env::args()
-        .nth(1)
-        .ok_or_else(|| anyhow!("Usage: everybody_loops file.rs "))?;
+    for f in std::env::args().skip(1) {
+        do_on_file(&f)?;
+    }
 
+    Ok(())
+}
+
+fn do_on_file(path: &str) -> Result<()> {
     let src = fs::read_to_string(&path)?;
     let mut tree: syn::File = syn::parse_str(&src)?;
 
@@ -23,7 +26,6 @@ fn main() -> Result<()> {
     let out = prettyplease::unparse(&tree);
 
     fs::write(path, out)?;
-
     Ok(())
 }
 
